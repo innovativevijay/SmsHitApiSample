@@ -189,7 +189,41 @@ smsApiClient.sendSingleSms(userId, password, senderId, phoneNumber, message, ent
 
 ## PHP
 
-[PHP Code](php/SmsApiClient.php) is organized with the `SmsApiClient` class. Replace placeholders within the `main` section to interact with the SMS API.
+```sh
+<?php
+class SmsApiClient {
+    private $baseUrl;
+
+    public function __construct($baseUrl) {
+        $this->baseUrl = $baseUrl;
+    }
+
+    public function sendSingleSms($userId, $password, $senderId, $phoneNumber, $message, $entityId, $templateId) {
+        $encodedMessage = urlencode($message);
+        $encodedPassword = urlencode($password);
+
+        $url = "$this->baseUrl?UserID=$userId&Password=$encodedPassword&SenderID=$senderId&Phno=$phoneNumber&Msg=$encodedMessage&EntityID=$entityId&TemplateID=$templateId";
+
+        return file_get_contents($url);
+    }
+}
+
+$smsApiClient = new SmsApiClient("http://<Domain Name>/api/SmsApi/SendSingleApi");
+
+// Replace the following values with your actual credentials
+$userId = 'Your_UserID';
+$password = 'Your_Password';
+$senderId = 'Your_SenderID';
+$phoneNumber = 'Your_Mobile_Number';
+$message = 'Hello PHP Sample Code testing This is a testing SMS to check delivery';
+$entityId = 'Your_EntityID';
+$templateId = 'Your TemplateID';
+
+$response = $smsApiClient->sendSingleSms($userId, $password, $senderId, $phoneNumber, $message, $entityId, $templateId);
+echo $response;
+?>
+
+```
 
 ## Python
 
