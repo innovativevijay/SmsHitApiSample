@@ -61,7 +61,69 @@ class Program
 
 ## Java
 
-[Java Code](java/SmsApiClient.java) showcases the `SmsApiClient` class, constructing the URL in the `sendSingleSms` method. Update credentials in the `main` method.
+```sh
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.net.URL;
+
+public class Main {
+    private static String baseUrl="http://<Domain Name>/api/SmsApi/SendSingleApi";
+    public static void main(String[] args) throws IOException, InterruptedException {
+        // Replace the following values with your actual credentials
+        String userId = "Your_UserID";
+        String password = "Your_Password";
+        String senderId = "Your_SenderID";
+        String phoneNumber = "Your_Mobile_Number";
+        String message = "Hello Java Sample Code This is a testing SMS to check delivery";
+        String entityId = "Your_EntityID";
+        String templateId = "Your_TemplateID";
+
+        String response = sendSingleSms(userId, password, senderId, phoneNumber, message, entityId, templateId);
+        System.out.println(response);
+    }
+    public static String sendSingleSms(String userId, String password, String senderId, String phoneNumber, String message, String entityId, String templateId) throws IOException, InterruptedException {
+        String encodedMessage = URLEncoder.encode(message, StandardCharsets.UTF_8.toString());
+        String encodedPassword = URLEncoder.encode(password, StandardCharsets.UTF_8.toString());
+
+        String apiurl = String.format("%s?UserID=%s&Password=%s&SenderID=%s&Phno=%s&Msg=%s&EntityID=%s&TemplateID=%s",
+                baseUrl, userId, encodedPassword, senderId, phoneNumber, encodedMessage, entityId, templateId);
+
+        try {
+            System.out.println(apiurl);
+            URL url = new URL(apiurl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                return response.toString();
+            } else {
+                System.out.println("HTTP GET request failed with response code " + responseCode);
+            }
+        } catch (Exception e) {
+            return "Error";
+        }
+        return "";
+    }
+    
+}
+
+```
 
 ## Node.js
 
