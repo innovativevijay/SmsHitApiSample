@@ -108,16 +108,16 @@ class SmsApiClient {
     }
 }
 
-const smsApiClient = new SmsApiClient("http://nimbusit.biz/api/SmsApi/SendSingleApi");
+const smsApiClient = new SmsApiClient("http://<Domain Name>/api/SmsApi/SendSingleApi");
 
 // Replace the following values with your actual credentials
-const userId = 'testdemo';
-const password = 'cbhe1755CB';
-const senderId = 'TECHNP';
-const phoneNumber = '7011361944';
-const message = 'Hello NodeJS Sample Code testing This is a testing SMS to check delivery TECPRP';
-const entityId = '1201159409941345107';
-const templateId = '1707167940051443628';
+const userId = 'Your_UserID';
+const password = 'Your_Password';
+const senderId = 'Your_SenderId';
+const phoneNumber = 'Your_Mobile_Number';
+const message = 'Hello NodeJS Sample Code testing This is a testing SMS to check delivery';
+const entityId = 'Your_Entity_ID';
+const templateId = 'Your_Template_ID';
 
 smsApiClient.sendSingleSms(userId, password, senderId, phoneNumber, message, entityId, templateId)
     .then(response => console.log(response))
@@ -131,6 +131,35 @@ smsApiClient.sendSingleSms(userId, password, senderId, phoneNumber, message, ent
 
 ## Python
 
-[Python Code](python/SmsApiClient.py) is object-oriented. Replace placeholders in the main program to interact with the SMS API. Ensure Python is installed.
+```sh
+import requests
+from urllib.parse import urlencode
+
+class SmsApiClient:
+    def __init__(self, base_url):
+        self.base_url = base_url
+
+    def send_single_sms(self, user_id, password, sender_id, phone_number, message, entity_id, template_id):
+        encoded_message = urlencode({'Msg': message})[4:]  # Removing 'Msg=' from the start
+        encoded_password = urlencode({'Password': password})[9:]  # Removing 'Password=' from the start
+        url = f"{self.base_url}?UserID={user_id}&Password={encoded_password}&SenderID={sender_id}&Phno={phone_number}&Msg={encoded_message}&EntityID={entity_id}&TemplateID={template_id}"
+        print(url)
+        response = requests.get(url)
+        return response.text
+
+# Replace the following values with your actual credentials
+user_id = 'Your_UserID'
+password = 'Your_Password'
+sender_id = 'Your_SenderID'
+phone_number = 'Your_Mobile_Number'
+message = 'Hello Python Sample Code testing This is a testing SMS to check delivery'
+entity_id = 'Your_Entity_ID'
+template_id = 'Your_TemplateID'
+
+sms_api_client = SmsApiClient("http://<Domain Name>/api/SmsApi/SendSingleApi")
+response = sms_api_client.send_single_sms(user_id, password, sender_id, phone_number, message, entity_id, template_id)
+print(response)
+
+```
 
 Feel free to explore and use these code samples in your projects!
