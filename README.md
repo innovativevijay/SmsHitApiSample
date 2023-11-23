@@ -65,7 +65,65 @@ class Program
 
 ## Node.js
 
-[Node.js Code](nodejs/smsApiClient.js) uses the `SmsApiClient` class for SMS API interaction. Update credentials in the main program and ensure Node.js is installed.
+```sh
+const http = require('http');
+const querystring = require('querystring');
+
+class SmsApiClient {
+    constructor(baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    sendSingleSms(userId, password, senderId, phoneNumber, message, entityId, templateId) {
+        const encodedMessage = encodeURIComponent(message);
+        const encodedPassword = encodeURIComponent(password);
+
+        const params = {
+            UserID: userId,
+            Password: encodedPassword,
+            SenderID: senderId,
+            Phno: phoneNumber,
+            Msg: encodedMessage,
+            EntityID: entityId,
+            TemplateID: templateId
+        };
+
+        const url = `${this.baseUrl}?${querystring.stringify(params)}`;
+
+        return new Promise((resolve, reject) => {
+            http.get(url, (response) => {
+                let data = '';
+
+                response.on('data', (chunk) => {
+                    data += chunk;
+                });
+
+                response.on('end', () => {
+                    resolve(data);
+                });
+            }).on('error', (error) => {
+                reject(`Error: ${error.message}`);
+            });
+        });
+    }
+}
+
+const smsApiClient = new SmsApiClient("http://nimbusit.biz/api/SmsApi/SendSingleApi");
+
+// Replace the following values with your actual credentials
+const userId = 'testdemo';
+const password = 'cbhe1755CB';
+const senderId = 'TECHNP';
+const phoneNumber = '7011361944';
+const message = 'Hello NodeJS Sample Code testing This is a testing SMS to check delivery TECPRP';
+const entityId = '1201159409941345107';
+const templateId = '1707167940051443628';
+
+smsApiClient.sendSingleSms(userId, password, senderId, phoneNumber, message, entityId, templateId)
+    .then(response => console.log(response))
+    .catch(error => console.error(error));
+
+```
 
 ## PHP
 
