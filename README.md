@@ -8,7 +8,56 @@ This repository provides code samples in C#, Java, Node.js, PHP, and Python for 
 
 ## C#
 
-[C# Code](csharp/SmsApiClient.cs) demonstrates an object-oriented approach using the `SmsApiClient` class. Replace placeholders in the `Main` method with credentials.
+```sh
+using System;
+using System.Net;
+using System.Web;
+
+public class SmsApiClient
+{
+    private string baseUrl;
+
+    public SmsApiClient(string baseUrl)
+    {
+        this.baseUrl = baseUrl;
+    }
+
+    public string SendSingleSms(string userId, string password, string senderId, string phoneNumber, string message, string entityId, string templateId)
+    {
+        string encodedMessage = HttpUtility.UrlEncode(message);
+        string encodedPassword = HttpUtility.UrlEncode(password);
+
+        string url = $"{baseUrl}?UserID={userId}&Password={encodedPassword}&SenderID={senderId}&Phno={phoneNumber}&Msg={encodedMessage}&EntityID={entityId}&TemplateID={templateId}";
+		Console.WriteLine(url);
+		return "Done";
+        using (WebClient client = new WebClient())
+        {
+            return client.DownloadString(url);
+        }		
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        SmsApiClient smsApiClient = new SmsApiClient("http://<DomainName>/api/SmsApi/SendSingleApi");
+
+        // Replace the following values with your actual credentials
+        string userId = "Your_UserID";
+        string password = "Your_Password";
+        string senderId = "Your_SMS_SenderId";
+        string phoneNumber = "Your_Mobile_Number";
+        string message = "Hello C-Sharp Code Testing This is a testing SMS to check delivery";
+        string entityId = "Your Entity ID";
+        string templateId = "Your Template ID";
+
+        string response = smsApiClient.SendSingleSms(userId, password, senderId, phoneNumber, message, entityId, templateId);
+        Console.WriteLine(response);
+    }
+}
+
+```
 
 ## Java
 
