@@ -1,7 +1,3 @@
-# SmsHitApiSample
-Code samples in C#, Java, Node.js, PHP, and Python demonstrate how to perform HTTP GET requests for sending SMS via an API. 
-
-
 # SMS API Integration
 
 This repository provides code samples in C#, Java, Node.js, PHP, and Python for interacting with an SMS API through HTTP GET requests.
