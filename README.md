@@ -253,5 +253,84 @@ response = sms_api_client.send_single_sms(user_id, password, sender_id, phone_nu
 print(response)
 
 ```
+## Flutter
 
+```
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(SmsApiClientApp());
+}
+
+class SmsApiClientApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SmsApiClientScreen(),
+    );
+  }
+}
+
+class SmsApiClientScreen extends StatefulWidget {
+  @override
+  _SmsApiClientScreenState createState() => _SmsApiClientScreenState();
+}
+
+class _SmsApiClientScreenState extends State<SmsApiClientScreen> {
+  final String baseUrl = 'http://<Domain Name>/api/SmsApi/SendSingleApi';
+  final TextEditingController _messageController = TextEditingController();
+
+  Future<void> sendSingleSms() async {
+    String userId = 'Your_UserID';
+    String password = Uri.encodeComponent('Your_Password');
+    String senderId = 'Your_SenderID';
+    String phoneNumber = 'Your_Mobile_Number';
+    String message = Uri.encodeComponent(_messageController.text);
+    String entityId = 'Your_Entity_ID';
+    String templateId = 'Your_TemplateID';
+
+    String url =
+        '$baseUrl?UserID=$userId&Password=$password&SenderID=$senderId&Phno=$phoneNumber&Msg=$message&EntityID=$entityId&TemplateID=$templateId';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        print('SMS sent successfully: ${response.body}');
+      } else {
+        print('Failed to send SMS: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending SMS: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SMS API Client'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              controller: _messageController,
+              decoration: InputDecoration(labelText: 'Enter your message'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: sendSingleSms,
+              child: Text('Send SMS'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+```
 Feel free to explore and use these code samples in your projects!
